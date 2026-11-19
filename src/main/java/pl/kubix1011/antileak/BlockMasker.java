@@ -11,15 +11,35 @@ public final class BlockMasker {
 
     public static boolean shouldMask(Material material) {
 
+        // Air remains unchanged
         if (material.isAir()) {
             return false;
         }
 
+        // Fluids remain unchanged
         if (material == Material.WATER
                 || material == Material.LAVA) {
             return false;
         }
 
+        String name = material.name();
+
+        // Doors remain unchanged
+        if (name.endsWith("_DOOR")) {
+            return false;
+        }
+
+        // Fences remain unchanged
+        if (name.endsWith("_FENCE")) {
+            return false;
+        }
+
+        // Fence gates remain unchanged
+        if (name.endsWith("_FENCE_GATE")) {
+            return false;
+        }
+
+        // Functional blocks remain unchanged
         if (material.isInteractable()) {
             return false;
         }
@@ -27,11 +47,36 @@ public final class BlockMasker {
         return true;
     }
 
-    public static Material getReplacementMaterial() {
+    public static Material getReplacementMaterial(
+            Material original
+    ) {
+
+        if (!shouldMask(original)) {
+            return original;
+        }
+
+        String name = original.name();
+
+        // All slabs become stone slabs
+        if (name.endsWith("_SLAB")) {
+            return Material.STONE_SLAB;
+        }
+
+        // All stairs become stone stairs
+        if (name.endsWith("_STAIRS")) {
+            return Material.STONE_STAIRS;
+        }
+
+        // Everything else becomes stone
         return Material.STONE;
     }
 
     public static boolean shouldMask(Block block) {
         return shouldMask(block.getType());
     }
+
+    public static Material getReplacementMaterial(Block block) {
+        return getReplacementMaterial(block.getType());
+    }
 }
+
