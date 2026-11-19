@@ -195,7 +195,20 @@ public final class AntiLeakPacketListener extends PacketListenerAbstract {
 
         Material material = Material.matchMaterial(blockName);
 
-        if (material == null || !BlockMasker.shouldMask(material)) {
+        if (material == null) {
+            return null;
+        }
+
+        // ANTI LEAK EXCEPTIONS
+        // All carpet colors and ladders remain visible.
+
+     if (material.name().endsWith("_CARPET")
+        || material.name().endsWith("_PRESSURE_PLATE")
+        || material == Material.LADDER) {
+    return null;
+}
+
+        if (!BlockMasker.shouldMask(material)) {
             return null;
         }
 
@@ -214,4 +227,3 @@ public final class AntiLeakPacketListener extends PacketListenerAbstract {
         return WrappedBlockState.getByString(replacementState);
     }
 }
-
