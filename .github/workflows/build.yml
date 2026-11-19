@@ -26,9 +26,9 @@ jobs:
       - name: Build AntiLeak
         run: mvn -B clean package
 
-      - name: Upload plugin JAR
+          - name: Upload plugin JAR
         uses: actions/upload-artifact@v4
         with:
-          name: AntiLeak-1.0.1
-          path: target/antileak-1.0.1.jar
+          name: AntiLeak-2.0.0
+          path: target/antileak-2.0.0.jar
           if-no-files-found: error
