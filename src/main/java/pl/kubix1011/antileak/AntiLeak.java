@@ -2,7 +2,6 @@
 package pl.kubix1011.antileak;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.Bukkit;
 
 import com.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
@@ -26,23 +25,25 @@ public final class AntiLeak extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+        reloadConfig();
+
         PacketEvents.getAPI().init();
 
-PacketEvents.getAPI().getEventManager().registerListener(
-    new AntiLeakPacketListener(this)
-);
+        visibilityManager = new VisibilityManager(this);
+        visibilityManager.load();
 
-visibilityManager = new VisibilityManager(this);
-visibilityManager.load();
+        PacketEvents.getAPI().getEventManager().registerListener(
+            new AntiLeakPacketListener(this)
+        );
+
         getServer().getPluginManager().registerEvents(
             new PlayerListener(this),
             this
         );
 
         if (getCommand("antileak") == null) {
-            getLogger().severe(
-                "Command antileak is missing!"
-            );
+            getLogger().severe("Command antileak is missing!");
 
             getServer().getPluginManager().disablePlugin(this);
             return;
@@ -52,10 +53,12 @@ visibilityManager.load();
             new AntiLeakCommand(this)
         );
 
+        getLogger().info("--------------------------------");
         getLogger().info("AntiLeak enabled!");
-        getLogger().info("VisibilityManager loaded!");
-        getLogger().info("PlayerListener registered!");
+        getLogger().info("Configuration loaded!");
         getLogger().info("PacketEvents initialized!");
+        getLogger().info("VisibilityManager loaded!");
+        getLogger().info("--------------------------------");
     }
 
     @Override
@@ -64,9 +67,9 @@ visibilityManager.load();
             visibilityManager.save();
         }
 
-        instance = null;
-
         PacketEvents.getAPI().terminate();
+
+        instance = null;
 
         getLogger().info("AntiLeak disabled!");
     }
