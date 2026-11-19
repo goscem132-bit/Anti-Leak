@@ -24,6 +24,13 @@ public final class AntiLeakCommand implements CommandExecutor {
             String[] args
     ) {
 
+        if (!sender.hasPermission("antileak.admin")) {
+            sender.sendMessage(
+                ChatColor.RED + "You don't have permission!"
+            );
+            return true;
+        }
+
         if (args.length != 2) {
             sender.sendMessage(
                 ChatColor.RED +
@@ -51,11 +58,17 @@ public final class AntiLeakCommand implements CommandExecutor {
 
             for (Player player : Bukkit.getOnlinePlayers()) {
                 plugin.getVisibilityManager().setEnabled(
-                    player.getUniqueId(),
+                    player,
                     enabled
                 );
 
                 changed++;
+
+                player.sendMessage(
+                    ChatColor.YELLOW +
+                    "Your AntiLeak status is now " +
+                    (enabled ? "ON" : "OFF")
+                );
             }
 
             sender.sendMessage(
@@ -79,7 +92,7 @@ public final class AntiLeakCommand implements CommandExecutor {
         }
 
         plugin.getVisibilityManager().setEnabled(
-            target.getUniqueId(),
+            target,
             enabled
         );
 
