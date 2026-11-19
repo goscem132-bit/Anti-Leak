@@ -1,25 +1,30 @@
 
 package pl.kubix1011.antileak;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-
 public final class VisibilityManager {
 
     private final AntiLeak plugin;
     private final File file;
+
     private FileConfiguration config;
+
+    private static final int ANTILEAK_DISTANCE = 2;
 
     public VisibilityManager(AntiLeak plugin) {
         this.plugin = plugin;
-        this.file = new File(plugin.getDataFolder(), "players.yml");
+        this.file = new File(
+            plugin.getDataFolder(),
+            "players.yml"
+        );
     }
 
     public void load() {
@@ -48,6 +53,17 @@ public final class VisibilityManager {
 
     public void setEnabled(Player player, boolean enabled) {
         setEnabled(player.getUniqueId(), enabled);
+        applyViewDistance(player);
+    }
+
+    public void applyViewDistance(Player player) {
+        if (isEnabled(player)) {
+            player.setSendViewDistance(
+                ANTILEAK_DISTANCE
+            );
+        } else {
+            player.setSendViewDistance(-1);
+        }
     }
 
     public void save() {
@@ -62,3 +78,4 @@ public final class VisibilityManager {
         }
     }
 }
+
