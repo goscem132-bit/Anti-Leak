@@ -17,8 +17,6 @@ public final class VisibilityManager {
 
     private FileConfiguration config;
 
-    private static final int ANTILEAK_DISTANCE = 2;
-
     public VisibilityManager(AntiLeak plugin) {
         this.plugin = plugin;
         this.file = new File(
@@ -36,9 +34,12 @@ public final class VisibilityManager {
     }
 
     public boolean isEnabled(UUID uuid) {
+        boolean defaultEnabled = plugin.getConfig()
+            .getBoolean("settings.default-enabled", true);
+
         return config.getBoolean(
             "players." + uuid,
-            true
+            defaultEnabled
         );
     }
 
@@ -58,8 +59,11 @@ public final class VisibilityManager {
 
     public void applyViewDistance(Player player) {
         if (isEnabled(player)) {
+            int distance = plugin.getConfig()
+                .getInt("settings.view-distance", 2);
+
             player.setSendViewDistance(
-                ANTILEAK_DISTANCE
+                Math.max(2, distance)
             );
         } else {
             player.setSendViewDistance(-1);
