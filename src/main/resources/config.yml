@@ -1,0 +1,25 @@
+
+# AntiLeak Configuration
+
+settings:
+
+  # AntiLeak enabled by default
+  default-enabled: true
+
+  # Maximum chunk sending distance
+  view-distance: 2
+
+  # Replace visible blocks with stone
+  block-mask:
+    enabled: true
+    material: STONE
+
+  # Hide the sky in every dimension
+  void-sky:
+    enabled: true
+
+  # Apply settings in every dimension
+  all-worlds: true
+
+  # Save player settings
+  save-player-data: true
