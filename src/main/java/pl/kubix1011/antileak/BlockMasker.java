@@ -2,22 +2,36 @@
 package pl.kubix1011.antileak;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.block.Block;
 
 public final class BlockMasker {
 
-    private final AntiLeak plugin;
-
-    public BlockMasker(AntiLeak plugin) {
-        this.plugin = plugin;
+    private BlockMasker() {
     }
 
-    public boolean shouldMask(Player player) {
-        return plugin.getVisibilityManager()
-                .isEnabled(player);
+    public static boolean shouldMask(Material material) {
+
+        if (material.isAir()) {
+            return false;
+        }
+
+        if (material == Material.WATER
+                || material == Material.LAVA) {
+            return false;
+        }
+
+        if (material.isInteractable()) {
+            return false;
+        }
+
+        return true;
     }
 
-    public Material getReplacementMaterial() {
+    public static Material getReplacementMaterial() {
         return Material.STONE;
+    }
+
+    public static boolean shouldMask(Block block) {
+        return shouldMask(block.getType());
     }
 }
