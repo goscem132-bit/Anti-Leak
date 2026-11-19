@@ -10,6 +10,8 @@ public final class AntiLeak extends JavaPlugin {
 
     private static AntiLeak instance;
 
+    private VisibilityManager visibilityManager;
+
     @Override
     public void onLoad() {
         instance = this;
@@ -25,25 +27,34 @@ public final class AntiLeak extends JavaPlugin {
     public void onEnable() {
         PacketEvents.getAPI().init();
 
-        getLogger().info("================================");
-        getLogger().info("AntiLeak successfully enabled!");
-        getLogger().info("PacketEvents initialized!");
-        getLogger().info("Minecraft target: 1.21.11");
-        getLogger().info("================================");
+        visibilityManager = new VisibilityManager(this);
+        visibilityManager.load();
+
+        getLogger().info("--------------------------------");
+        getLogger().info("AntiLeak enabled!");
+        getLogger().info("VisibilityManager loaded!");
+        getLogger().info("Default AntiLeak: ON");
+        getLogger().info("--------------------------------");
     }
 
     @Override
     public void onDisable() {
-        if (PacketEvents.getAPI() != null) {
-            PacketEvents.getAPI().terminate();
+        if (visibilityManager != null) {
+            visibilityManager.save();
         }
 
-        getLogger().info("AntiLeak disabled!");
+        PacketEvents.getAPI().terminate();
 
         instance = null;
+
+        getLogger().info("AntiLeak disabled!");
     }
 
     public static AntiLeak getInstance() {
         return instance;
+    }
+
+    public VisibilityManager getVisibilityManager() {
+        return visibilityManager;
     }
 }
