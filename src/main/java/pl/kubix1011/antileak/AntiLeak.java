@@ -28,9 +28,12 @@ public final class AntiLeak extends JavaPlugin {
     public void onEnable() {
         PacketEvents.getAPI().init();
 
-        visibilityManager = new VisibilityManager(this);
-        visibilityManager.load();
+PacketEvents.getAPI().getEventManager().registerListener(
+    new AntiLeakPacketListener(this)
+);
 
+visibilityManager = new VisibilityManager(this);
+visibilityManager.load();
         getServer().getPluginManager().registerEvents(
             new PlayerListener(this),
             this
