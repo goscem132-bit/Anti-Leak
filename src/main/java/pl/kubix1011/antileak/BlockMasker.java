@@ -24,6 +24,11 @@ public final class BlockMasker {
 
         String name = material.name();
 
+        // Non-solid plants and vegetation remain unchanged
+        if (!material.isSolid()) {
+            return false;
+        }
+
         // Doors remain unchanged
         if (name.endsWith("_DOOR")) {
             return false;
@@ -57,17 +62,14 @@ public final class BlockMasker {
 
         String name = original.name();
 
-        // All slabs become stone slabs
         if (name.endsWith("_SLAB")) {
             return Material.STONE_SLAB;
         }
 
-        // All stairs become stone stairs
         if (name.endsWith("_STAIRS")) {
             return Material.STONE_STAIRS;
         }
 
-        // Everything else becomes stone
         return Material.STONE;
     }
 
