@@ -30,9 +30,23 @@ public final class AntiLeak extends JavaPlugin {
         visibilityManager = new VisibilityManager(this);
         visibilityManager.load();
 
+        if (getCommand("antileak") == null) {
+            getLogger().severe(
+                "Command antileak is missing from plugin.yml!"
+            );
+
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        getCommand("antileak").setExecutor(
+            new AntiLeakCommand(this)
+        );
+
         getLogger().info("--------------------------------");
         getLogger().info("AntiLeak enabled!");
         getLogger().info("VisibilityManager loaded!");
+        getLogger().info("AntiLeak command registered!");
         getLogger().info("Default AntiLeak: ON");
         getLogger().info("--------------------------------");
     }
@@ -43,7 +57,9 @@ public final class AntiLeak extends JavaPlugin {
             visibilityManager.save();
         }
 
-        PacketEvents.getAPI().terminate();
+        if (PacketEvents.getAPI() != null) {
+            PacketEvents.getAPI().terminate();
+        }
 
         instance = null;
 
