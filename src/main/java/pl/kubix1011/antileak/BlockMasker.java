@@ -11,7 +11,6 @@ public final class BlockMasker {
 
     public static boolean shouldMask(Material material) {
 
-        // Air remains unchanged
         if (material.isAir()) {
             return false;
         }
@@ -22,10 +21,17 @@ public final class BlockMasker {
             return false;
         }
 
+        // Fire remains unchanged
+        if (material == Material.FIRE
+                || material == Material.SOUL_FIRE) {
+            return false;
+        }
+
         String name = material.name();
 
-        // Non-solid plants and vegetation remain unchanged
-        if (!material.isSolid()) {
+        // Signs remain unchanged
+        if (name.endsWith("_SIGN")
+                || name.endsWith("_HANGING_SIGN")) {
             return false;
         }
 
@@ -35,12 +41,8 @@ public final class BlockMasker {
         }
 
         // Fences remain unchanged
-        if (name.endsWith("_FENCE")) {
-            return false;
-        }
-
-        // Fence gates remain unchanged
-        if (name.endsWith("_FENCE_GATE")) {
+        if (name.endsWith("_FENCE")
+                || name.endsWith("_FENCE_GATE")) {
             return false;
         }
 
@@ -49,6 +51,7 @@ public final class BlockMasker {
             return false;
         }
 
+        // All remaining blocks are processed
         return true;
     }
 
@@ -60,16 +63,24 @@ public final class BlockMasker {
             return original;
         }
 
+        // Non-solid blocks become invisible
+        if (!original.isSolid()) {
+            return Material.AIR;
+        }
+
         String name = original.name();
 
+        // Slabs become stone slabs
         if (name.endsWith("_SLAB")) {
             return Material.STONE_SLAB;
         }
 
+        // Stairs become stone stairs
         if (name.endsWith("_STAIRS")) {
             return Material.STONE_STAIRS;
         }
 
+        // Everything else becomes stone
         return Material.STONE;
     }
 
@@ -81,4 +92,3 @@ public final class BlockMasker {
         return getReplacementMaterial(block.getType());
     }
 }
-
