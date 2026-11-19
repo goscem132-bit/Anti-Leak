@@ -1,6 +1,6 @@
 
 name: AntiLeak
-version: 1.0.0
+version: 2.0.0
 main: pl.kubix1011.antileak.AntiLeak
 api-version: '1.21.11'
 author: Kubix1011
